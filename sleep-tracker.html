@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sleep Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f4f6f8;
+      --bg-dark: #1f2937;
+      --card-light: #ffffff;
+      --card-dark: #374151;
+      --text-light: #1f2937;
+      --text-dark: #f9fafb;
+      --primary: #4f46e5;
+      --accent: #10b981;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      --border-radius: 16px;
+      --font: 'Inter', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      padding: 2rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .toggle-dark {
+      background: none;
+      border: 1px solid currentColor;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      float: right;
+    }
+
+    .card {
+      background: var(--card-light);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: background 0.3s;
+    }
+
+    body.dark .card {
+      background: var(--card-dark);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: #f9fafb;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+    }
+
+    .log-list {
+      margin-top: 2rem;
+    }
+
+    .log-entry {
+      background: #e5e7eb;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    body.dark .log-entry {
+      background: #4b5563;
+      color: #f9fafb;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .clear-btn {
+      margin-top: 1rem;
+      background-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="toggle-dark" onclick="toggleDarkMode()">🌙 Toggle Dark</button>
+      <h1>🛌 Sleep Tracker</h1>
+      <p>Track and improve your sleep health.</p>
+    </div>
+
+    <div class="card">
+      <form id="sleepForm">
+        <div class="form-group">
+          <label for="start-time">Sleep Start</label>
+          <input type="time" id="start-time" required />
+        </div>
+        <div class="form-group">
+          <label for="end-time">Wake-Up Time</label>
+          <input type="time" id="end-time" required />
+        </div>
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="Dreams, how you felt, etc."></textarea>
+        </div>
+        <button type="submit">💾 Save Sleep Log</button>
+      </form>
+    </div>
+
+    <div class="log-list" id="logList"></div>
+    <button class="clear-btn" onclick="clearLogs()">🧹 Clear All Logs</button>
+
+    <div class="footer-note">
+      Built for a better you ✨
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('sleepForm');
+    const logList = document.getElementById('logList');
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    function formatTimeDiff(start, end) {
+      let [h1, m1] = start.split(':').map(Number);
+      let [h2, m2] = end.split(':').map(Number);
+      let startMins = h1 * 60 + m1;
+      let endMins = h2 * 60 + m2;
+      if (endMins <= startMins) endMins += 24 * 60;
+      const diff = endMins - startMins;
+      const hours = Math.floor(diff / 60);
+      const minutes = diff % 60;
+      return `${hours}h ${minutes}m`;
+    }
+
+    function saveLog(e) {
+      e.preventDefault();
+      const start = document.getElementById('start-time').value;
+      const end = document.getElementById('end-time').value;
+      const notes = document.getElementById('notes').value;
+
+      if (!start || !end) return;
+
+      const duration = formatTimeDiff(start, end);
+      const log = {
+        date: new Date().toLocaleDateString(),
+        start,
+        end,
+        duration,
+        notes
+      };
+
+      const logs = JSON.parse(localStorage.getItem('sleepLogs') || '[]');
+      logs.unshift(log);
+      localStorage.setItem('sleepLogs', JSON.stringify(logs));
+      form.reset();
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const logs = JSON.parse(localStorage.getItem('sleepLogs') || '[]');
+      logList.innerHTML = logs.map(log => `
+        <div class="log-entry">
+          <strong>${log.date}</strong><br/>
+          💤 ${log.start} → ${log.end} (${log.duration})<br/>
+          📝 ${log.notes || 'No notes'}
+        </div>
+      `).join('');
+    }
+
+    function clearLogs() {
+      if (confirm("Clear all logs?")) {
+        localStorage.removeItem('sleepLogs');
+        renderLogs();
+      }
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') document.body.classList.add('dark');
+    }
+
+    form.addEventListener('submit', saveLog);
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderLogs();
+    });
+  </script>
+</body>
+</html>
