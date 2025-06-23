@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sleep Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="toggle-dark" onclick="toggleDarkMode()">🌙 Toggle Dark</button>
+      <h1>🛌 Sleep Tracker</h1>
+      <p>Track and improve your sleep health.</p>
+    </div>
+
+    <div class="card">
+      <form id="sleepForm">
+        <div class="form-group">
+          <label for="start-time">Sleep Start</label>
+          <input type="time" id="start-time" required />
+        </div>
+        <div class="form-group">
+          <label for="end-time">Wake-Up Time</label>
+          <input type="time" id="end-time" required />
+        </div>
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="Dreams, how you felt, etc."></textarea>
+        </div>
+        <button type="submit">💾 Save Sleep Log</button>
+      </form>
+    </div>
+
+    <div class="log-list" id="logList"></div>
+    <button class="clear-btn" onclick="clearLogs()">🧹 Clear All Logs</button>
+
+    <div class="footer-note">Built for a better you ✨</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
