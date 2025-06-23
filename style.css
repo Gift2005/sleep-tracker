@@ -1,0 +1,131 @@
+:root {
+  --bg-light: #f4f6f8;
+  --bg-dark: #1f2937;
+  --card-light: #ffffff;
+  --card-dark: #374151;
+  --text-light: #1f2937;
+  --text-dark: #f9fafb;
+  --primary: #4f46e5;
+  --accent: #10b981;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  --border-radius: 16px;
+  --font: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  padding: 2rem;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+.toggle-dark {
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  float: right;
+}
+
+.card {
+  background: var(--card-light);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: background 0.3s;
+}
+
+body.dark .card {
+  background: var(--card-dark);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f9fafb;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #4338ca;
+}
+
+.log-list {
+  margin-top: 2rem;
+}
+
+.log-entry {
+  background: #e5e7eb;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+body.dark .log-entry {
+  background: #4b5563;
+  color: #f9fafb;
+}
+
+.footer-note {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.clear-btn {
+  margin-top: 1rem;
+  background-color: var(--accent);
+}
